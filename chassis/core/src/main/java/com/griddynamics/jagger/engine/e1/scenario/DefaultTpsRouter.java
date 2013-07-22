@@ -36,13 +36,13 @@ import static com.griddynamics.jagger.util.DecimalUtil.compare;
 public class DefaultTpsRouter implements TpsRouter {
     private static final Logger log = LoggerFactory.getLogger(DefaultTpsRouter.class);
 
-    private final DesiredTps desiredTps;
+    private final FunctionOfTime desiredTps;
     private final MaxTpsCalculator maxTpsCalculator;
     private final SystemClock clock;
 
     private final Map<NodeId, BigDecimal> desiredTpsPerNode;
 
-    public DefaultTpsRouter(DesiredTps desiredTps, MaxTpsCalculator maxTpsCalculator, SystemClock clock) {
+    public DefaultTpsRouter(FunctionOfTime desiredTps, MaxTpsCalculator maxTpsCalculator, SystemClock clock) {
         this.desiredTps = desiredTps;
         this.maxTpsCalculator = maxTpsCalculator;
         this.clock = clock;
@@ -134,7 +134,7 @@ public class DefaultTpsRouter implements TpsRouter {
 
     @Override
     public BigDecimal getDesiredTps() {
-        return desiredTps.getDesiredTps();
+        return desiredTps.getDisplayValue();
     }
 
     private void initialize(Set<NodeId> nodes) {

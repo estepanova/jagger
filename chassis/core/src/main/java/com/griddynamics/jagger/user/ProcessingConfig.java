@@ -294,6 +294,7 @@ public class ProcessingConfig implements Serializable {
                 private String startIn;
                 private String startBy;
                 private String life;
+                private String warmUpTime;
 
                 public User(@Attribute(name = "count") String count,
                             @Attribute(name = "startCount") String startCount,
@@ -358,6 +359,14 @@ public class ProcessingConfig implements Serializable {
                 @Attribute(name = "startIn")
                 public void setStartIn(String startIn) {
                     this.startIn = startIn;
+                }
+
+                public String getWarmUpTime() {
+                    return warmUpTime;
+                }
+
+                public void setWarmUpTime(String warmUpTime) {
+                    this.warmUpTime = warmUpTime;
                 }
             }
             public static class Tps implements Serializable{

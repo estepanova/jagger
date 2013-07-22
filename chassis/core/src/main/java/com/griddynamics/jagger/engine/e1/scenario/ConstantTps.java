@@ -22,7 +22,7 @@ package com.griddynamics.jagger.engine.e1.scenario;
 
 import java.math.BigDecimal;
 
-public class ConstantTps implements DesiredTps {
+public class ConstantTps implements FunctionOfTime {
     private final BigDecimal tps;
 
     public ConstantTps(BigDecimal tps) {
@@ -35,7 +35,7 @@ public class ConstantTps implements DesiredTps {
     }
 
     @Override
-    public BigDecimal getDesiredTps() {
+    public BigDecimal getDisplayValue() {
         return tps;
     }
 

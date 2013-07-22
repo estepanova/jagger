@@ -60,14 +60,14 @@ public abstract class AbstractRateClockConfiguration implements WorkloadClockCon
         return getRateClock(tickInterval, tpsRouter, workloadSuggestionMaker, systemClock, maxThreadNumber);
     }
 
-    protected DesiredTps createDesiredTps (BigDecimal tps) {
+    protected FunctionOfTime createDesiredTps (BigDecimal tps) {
         log.debug("creating createDesiredTps({}, {})", new Object[] { tps, warmUpTime });
         if (!isRumpUp()) {
             log.debug("creating ConstantTps({})", tps);
             return new ConstantTps(tps);
         }
-        log.debug("creating RumpUpTps({}, {})", new Object[]{ tps, warmUpTime });
-        return new RumpUpTps(tps, warmUpTime);
+        log.debug("creating RumpUp({}, {})", new Object[]{ tps, warmUpTime });
+        return new RumpUp(tps, warmUpTime);
     }
 
     protected abstract WorkloadClock getRateClock(int tickInterval, TpsRouter tpsRouter,

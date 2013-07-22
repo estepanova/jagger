@@ -22,19 +22,19 @@ package com.griddynamics.jagger.engine.e1.scenario;
 
 import java.math.BigDecimal;
 
-public interface DesiredTps {
+public interface FunctionOfTime {
 
     /**
-     * Get value of TPS in depending of time
+     * Returns the value of time
      * @param period - time for function
-     * @return TPS for this time
+     * @return function value for this time
      */
     BigDecimal get(long period);
 
     /**
-     * Get some value, which describes distribution of TPS
-     * @return TPS
+     * Returns some value, which describes distribution of the function
+     * @return display value
      */
-    BigDecimal getDesiredTps();
+    BigDecimal getDisplayValue();
 
 }

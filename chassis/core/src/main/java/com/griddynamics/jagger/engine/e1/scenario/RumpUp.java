@@ -20,7 +20,6 @@
 
 package com.griddynamics.jagger.engine.e1.scenario;
 
-import org.bouncycastle.x509.NoSuchStoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,44 +29,58 @@ import java.math.BigDecimal;
  * @author Nikolay Musienko
  *         Date: 01.07.13
  */
-public class RumpUpTps  implements DesiredTps {
-    Logger log = LoggerFactory.getLogger(RumpUpTps.class);
+public class RumpUp implements FunctionOfTime {
+    private final Logger log = LoggerFactory.getLogger(RumpUp.class);
 
-    private final BigDecimal tps;
+    private final BigDecimal value;
     private long warmUpTime;
     private long startTime = -1;
+    private long deferredStart;
+    private String name;
     private BigDecimal k;
 
-    public RumpUpTps(BigDecimal tps, long warmUpTime) {
-        this.tps = tps;
+    public RumpUp(BigDecimal value, long warmUpTime) {
+        this(value, warmUpTime, "");
+    }
+
+    public RumpUp(BigDecimal value, long warmUpTime, String name) {
+        this(value, warmUpTime, 0, name);
+    }
+
+    public RumpUp(BigDecimal value, long warmUpTime, long deferredStart, String name) {
+        this.name = name;
+        this.value = value;
         this.warmUpTime = warmUpTime;
+        this.deferredStart = deferredStart;
     }
 
     @Override
     public BigDecimal get(long time) {
         if(startTime == -1) {
-            startTime = time;
-            warmUpTime += time;
-            k = tps.divide(new BigDecimal(warmUpTime - startTime));
+            startTime = time + deferredStart;
+            warmUpTime += startTime;
+            k = value.divide(new BigDecimal(warmUpTime - startTime));
         }
         if (time > warmUpTime) {
-            return tps;
+            return value;
         }
-        BigDecimal currentTps = k.multiply(new BigDecimal(time - startTime));
-        log.debug("Changing rate up to: {}", currentTps);
-        return currentTps;
+        if (time < startTime) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal currentValue = k.multiply(new BigDecimal(time - startTime));
+        log.debug("Changing rate up to: {}", currentValue);
+        return currentValue;
     }
 
     @Override
-    public BigDecimal getDesiredTps() {
-        return tps;
+    public BigDecimal getDisplayValue() {
+        return value;
     }
 
     @Override
     public String toString() {
-        return "RumpUpTps{" +
-                "log=" + log +
-                ", tps=" + tps +
+        return "RumpUp" + name + " {" +
+                ", " + name + "=" + value +
                 ", warmUpTime=" + warmUpTime +
                 ", startTime=" + startTime +
                 '}';
